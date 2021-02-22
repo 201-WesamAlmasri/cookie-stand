@@ -113,14 +113,44 @@ footer {
     background-color: rgb(233, 189, 122);
 }
 
-#informations_container {
+main {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    margin-top: 20px;
+    align-items: center;
 }
 
-#informations_container article {
+#sales_table {
+    margin: 20px 20px;
+    width: 100%;
+    background-color: #f1f1c1;
+}
+
+#sales_table tr:nth-child(even) {
+    background-color: #eee;
+  }
+
+#sales_table tr:nth-child(odd) {
+    background-color: #fff;
+}
+#sales_table th {
+    color: indianred;
+    background-color: rgb(243, 201, 87);
+}
+
+table, th, td {
+    border: 1px solid gray;
+  }
+
+th {
+    text-align: left;
+    font-weight: 600;
+}
+  
+th, td {
+    padding: 0 5px ;
+}
+
+/* #informations_container article {
     margin: 10px;
     padding: 10px;
     width: 250px;
@@ -135,7 +165,7 @@ footer {
 
 #informations_container article:hover {
     background-color: rgb(236, 162, 77);
-}
+} */
 
 .main_title {
     font-size: 30px;

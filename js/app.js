@@ -1,50 +1,110 @@
 'use strict';
 
+let openHours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
+
 // constructor function
-function Branch(name, minHourlyCustomer, maxHourlyCustomer, averageCookiesPerCustomer, openHours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm']) {
+function Branch(name, minHourlyCustomer, maxHourlyCustomer, averageCookiesPerCustomer) {
   this.name = name;
-  this.openHours = openHours;
   this.minHourlyCustomer = minHourlyCustomer;
   this.maxHourlyCustomer = maxHourlyCustomer;
   this.averageCookiesPerCustomer = averageCookiesPerCustomer;
   this.cookiesAmountPerHour = [];
-  this.getRandomCustomerNumber = function () {
-    return Math.floor(Math.random() * (this.maxHourlyCustomer - this.minHourlyCustomer) + this.minHourlyCustomer);
-  };
-  // function to calclate the amount of cookies per hour
-  this.getCookiesAmountPerHourPerHour = function () {
-    return Math.round(this.getRandomCustomerNumber() * this.averageCookiesPerCustomer);
-  };
-  this.setCookiesAmountPerHour = function () {
-    for (let hour = 0; hour < this.openHours.length; hour++){
-      this.cookiesAmountPerHour.push(this.getCookiesAmountPerHourPerHour());
-    }
-  };
-  // function to create a list for one Branch
-  this.render = function () {
-    let containerElement = document.getElementById('informations_container'); // target the container element that will contain all the informations
-    if(containerElement){
-      let article = document.createElement('article');
-      article.setAttribute('class', 'location_section');
-      let p = document.createElement('p');
-      p.innerText = this.name;
-      let ul = document.createElement('ul');
-      containerElement.appendChild(article);
-      article.appendChild(p);
-      article.appendChild(ul);
-      let total = 0;
-      for(let i = 0 ; i < this.openHours.length; i++){
-        let li = document.createElement('li');
-        li.innerText = this.openHours[i] + ': ' + this.cookiesAmountPerHour[i] + ' cookies';
-        ul.appendChild(li);
-        total += this.cookiesAmountPerHour[i];
-      }
-      let li = document.createElement('li');
-      li.innerText = 'Total: ' + total + ' cookies';
-      ul.appendChild(li);
-    }
-  };
+  this.totalCookiesPerDay = 0;
 }
+
+// function to get random nuber of customer
+Branch.prototype.getRandomCustomerNumber = function () {
+  return Math.floor(Math.random() * (this.maxHourlyCustomer - this.minHourlyCustomer) + this.minHourlyCustomer);
+};
+
+// function to calclate the amount of cookies per hour
+Branch.prototype.getCookiesAmountPerHourPerHour = function () {
+  return Math.round(this.getRandomCustomerNumber() * this.averageCookiesPerCustomer);
+};
+
+// function to set the cookies amount needed per hour in the array
+Branch.prototype.setCookiesAmountPerHour = function () {
+  for (let hour = 0; hour < openHours.length; hour++){
+    this.cookiesAmountPerHour.push(this.getCookiesAmountPerHourPerHour());
+  }
+};
+
+// function to calclate the amount of cookies per hour
+Branch.prototype.setTotalCookiesPerDay = function () {
+  let total = 0;
+  for(let i = 0; i < this.cookiesAmountPerHour.length; i++){
+    total = total + this.cookiesAmountPerHour[i];
+  }
+  this.totalCookiesPerDay = total;
+};
+
+// function to create a list for one Branch
+Branch.prototype.render = function () {
+  // target the table that will contain all info
+  const tableElement = document.getElementById('sales_table');
+  if(tableElement){
+    const trElement = document.createElement('tr');
+    tableElement.appendChild(trElement);
+    const tdNameElement = document.createElement('td');
+    tdNameElement.textContent = this.name;
+    trElement.appendChild(tdNameElement);
+    for(let i = 0; i < openHours.length; i++){
+      const tdElement = document.createElement('td');
+      tdElement.textContent = this.cookiesAmountPerHour[i];
+      trElement.appendChild(tdElement);
+    }
+    const tdTotalElement = document.createElement('td');
+    this.setTotalCookiesPerDay();
+    tdTotalElement.textContent = this.totalCookiesPerDay;
+    trElement.appendChild(tdTotalElement);
+  }
+};
+
+// functoin to create the header
+function createTableHeader() {
+  // target the table that will contain all info
+  const tableElement = document.getElementById('sales_table');
+  const trHeadElement = document.createElement('tr');
+  const thEmptyElement = document.createElement('th');
+  trHeadElement.appendChild(thEmptyElement);
+  for(let i = 0; i < openHours.length; i++){
+    const thElement = document.createElement('th');
+    thElement.textContent = openHours[i];
+    trHeadElement.appendChild(thElement);
+  }
+  const thTotalElement = document.createElement('th');
+  thTotalElement.textContent = 'Location Total';
+  trHeadElement.appendChild(thTotalElement);
+  tableElement.appendChild(trHeadElement);
+}
+
+// functoin to create the footer
+function createTablefooter(branchs) {
+  // target the table that will contain all info
+  const tableElement = document.getElementById('sales_table');
+  const trFootElement = document.createElement('tr');
+  const thTotalElement = document.createElement('th');
+  thTotalElement.textContent = 'Totals';
+  trFootElement.appendChild(thTotalElement);
+  for(let i = 0; i < openHours.length; i++){
+    const thElement = document.createElement('th');
+    let totalCookiesPerHour = 0;
+    for(let j = 0; j < branchs.length; j++){
+      totalCookiesPerHour = totalCookiesPerHour + branchs[j].cookiesAmountPerHour[i];
+    }
+    thElement.textContent = totalCookiesPerHour;
+    trFootElement.appendChild(thElement);
+  }
+  let totalCookiesPerDay = 0;
+  for(let k = 0; k < branchs.length; k++){
+    totalCookiesPerDay = totalCookiesPerDay + branchs[k].totalCookiesPerDay;
+  }
+  const thTotalDayElement = document.createElement('th');
+  thTotalDayElement.textContent = totalCookiesPerDay;
+  trFootElement.appendChild(thTotalDayElement);
+  tableElement.appendChild(trFootElement);
+}
+
 
 // Seattle instance
 const seattle = new Branch('Seattle', 23, 63, 6.3);
@@ -61,12 +121,13 @@ const lima = new Branch('Lima', 2, 16, 4.6);
 // store all Branchs in an array
 let branchs = [seattle, tokyo, dubai, paris, lima];
 
-// function to simualte the sale process through day and render it on the web page
-function simualte() {
-  for (let branch = 0; branch < branchs.length; branch++){
-    branchs[branch].setCookiesAmountPerHour();
-    branchs[branch].render();
-  }
+// call function to render the header of the table
+createTableHeader();
+
+// call render functions for each instance
+for(let branch = 0; branch < branchs.length; branch++){
+  branchs[branch].setCookiesAmountPerHour();
+  branchs[branch].render();
 }
 
-simualte();
+createTablefooter(branchs);
