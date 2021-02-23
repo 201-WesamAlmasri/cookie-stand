@@ -63,7 +63,10 @@ Branch.prototype.render = function () {
 // functoin to create the header
 function createTableHeader() {
   // target the table that will contain all info
-  const tableElement = document.getElementById('sales_table');
+  const divContainerEl = document.getElementById('information_container');
+  const tableElement = document.createElement('table');
+  tableElement.setAttribute('id', 'sales_table');
+  divContainerEl.appendChild(tableElement);
   const trHeadElement = document.createElement('tr');
   const thEmptyElement = document.createElement('th');
   trHeadElement.appendChild(thEmptyElement);
@@ -121,13 +124,32 @@ const lima = new Branch('Lima', 2, 16, 4.6);
 // store all Branchs in an array
 let branchs = [seattle, tokyo, dubai, paris, lima];
 
-// call function to render the header of the table
-createTableHeader();
+if(document.getElementById('information_container')){
+  // call function to render the header of the table
+  createTableHeader();
 
-// call render functions for each instance
-for(let branch = 0; branch < branchs.length; branch++){
-  branchs[branch].setCookiesAmountPerHour();
-  branchs[branch].render();
+  // call render functions for each instance
+  for(let branch = 0; branch < branchs.length; branch++){
+    branchs[branch].setCookiesAmountPerHour();
+    branchs[branch].render();
+  }
+
+  createTablefooter(branchs);
 }
 
-createTablefooter(branchs);
+// code for slider image
+
+let slideIndex = 0;
+carousel();
+
+function carousel() {
+  let i;
+  let x = document.getElementsByClassName('mySlides');
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = 'none';
+  }
+  slideIndex++;
+  if (slideIndex > x.length) {slideIndex = 1;}
+  x[slideIndex-1].style.display = 'block';
+  setTimeout(carousel, 2000); // Change image every 2 seconds
+}
