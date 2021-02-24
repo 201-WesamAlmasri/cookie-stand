@@ -169,7 +169,7 @@ carousel();
 function carousel() {
   let i;
   let x = document.getElementsByClassName('mySlides');
-  if(console.length > 0){
+  if(x.length > 0){
     for (i = 0; i < x.length; i++) {
       x[i].style.display = 'none';
     }
