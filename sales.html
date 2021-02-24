@@ -21,6 +21,20 @@
         <h1 class="main_title">Salamon Cookies Shop</h1>
     </header>
     <main>
+        <form id="locationForm">
+            <fieldset>
+                <legend>Add Location</legend>
+                <label for="nameInput">Location Name</label>
+                <input type="text" maxlength="200" name="name" id="nameInput" required>
+                <label for="minHourlyCustomer">Minimum Customer Per Hour</label>
+                <input type="number" min="0" name="min_customer" id="minHourlyCustomer" required>
+                <label for="maxHourlyCustomer">Maximum Customer Per Hour</label>
+                <input type="number" min="0" name="max_customer" id="maxHourlyCustomer" required>
+                <label for="averageCookiesPerCustomer">Average Cookies Per Customer</label>
+                <input type="number" min="0" max="100" name="avg_cookies_per_customer" id="averageCookiesPerCustomer" required>
+                <button type="submit">Save Location</button>
+            </fieldset>
+        </form>
         <div id="information_container"></div>
     </main>
     <footer><p>All right reserved &copy;Salmon Cookies</p></footer>
