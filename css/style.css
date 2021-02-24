@@ -213,6 +213,10 @@ input {
     border-radius: 5px;
 }
 
+input:invalid {
+    border-color: red;
+}
+
 button[type="submit"] {
     margin-top: 10px;
     width: 50%;

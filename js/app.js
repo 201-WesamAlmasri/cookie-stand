@@ -137,6 +137,30 @@ if(document.getElementById('information_container')){
   createTablefooter(branchs);
 }
 
+// submitt event listener
+
+const formElement = document.getElementById('locationForm');
+if(formElement){
+  formElement.addEventListener('submit', handleSubmitt);
+}
+
+// function to handle submit event
+
+function handleSubmitt(event) {
+  event.preventDefault();
+  const newInstance = new Branch(
+    event.target.name.value,
+    event.target.min_customer.value,
+    event.target.max_customer.value,
+    event.target.avg_cookies_per_customer.value
+  );
+  branchs.push(newInstance);
+  document.querySelector('table tr:last-child').remove();
+  newInstance.setCookiesAmountPerHour();
+  newInstance.render();
+  createTablefooter(branchs);
+}
+
 // code for slider image
 
 let slideIndex = 0;
@@ -145,11 +169,13 @@ carousel();
 function carousel() {
   let i;
   let x = document.getElementsByClassName('mySlides');
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = 'none';
+  if(console.length > 0){
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = 'none';
+    }
+    slideIndex++;
+    if (slideIndex > x.length) {slideIndex = 1;}
+    x[slideIndex-1].style.display = 'block';
+    setTimeout(carousel, 2000); // Change image every 2 seconds
   }
-  slideIndex++;
-  if (slideIndex > x.length) {slideIndex = 1;}
-  x[slideIndex-1].style.display = 'block';
-  setTimeout(carousel, 2000); // Change image every 2 seconds
 }
